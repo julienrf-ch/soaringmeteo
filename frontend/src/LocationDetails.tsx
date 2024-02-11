@@ -8,6 +8,7 @@ import {Meteogram, Sounding} from "./DetailedView";
 import { HelpButton } from "./help/HelpButton";
 import {buttonStyle, closeButton, surfaceOverMap} from "./styles/Styles";
 import { css } from "./css-hooks";
+import {useI18n} from "./i18n";
 
 /**
  * Box showing the forecast details (summary, meteogram, or sounding) for the selected location.
@@ -16,6 +17,8 @@ export const LocationDetails = (props: {
   locationClicks: Accessor<MapBrowserEvent<any> | undefined>
   domain: Domain
 }): JSX.Element => {
+
+  const { m } = useI18n();
 
   // Open the detailed view when the users click on the map
   createEffect(on(props.locationClicks, (event) => {
@@ -74,26 +77,26 @@ export const LocationDetails = (props: {
         >
           <span
             style={{ ...buttonStyle, ...(detailedView().viewType === 'summary' ? { 'background-color': 'lightgray' } : {}) }}
-            title="Summary of the forecast for this location"
+            title={ m().locationSummaryLegend() }
             onClick={ () => props.domain.showLocationForecast(detailedView().latitude, detailedView().longitude, 'summary') }
           >
-            Summary
+            { m().locationSummary() }
           </span>
 
           <span
             style={{ ...buttonStyle, ...(detailedView().viewType === 'meteogram' ? { 'background-color': 'lightgray' } : {}) }}
-            title="Meteogram for this location"
+            title={ m().locationMeteogramLegend() }
             onClick={ () => props.domain.showLocationForecast(detailedView().latitude, detailedView().longitude, 'meteogram') }
           >
-            Meteogram
+            { m().locationMeteogram() }
           </span>
 
           <span
             style={{ ...buttonStyle, ...(detailedView().viewType === 'sounding' ? { 'background-color': 'lightgray' } : {}) }}
-            title="Sounding for this time and location"
+            title={ m().locationSoundingLegend() }
             onClick={ () => props.domain.showLocationForecast(detailedView().latitude, detailedView().longitude, 'sounding') }
           >
-            Sounding
+            { m().locationSounding() }
           </span>
 
           <HelpButton domain={ props.domain } overMap={ false } />
